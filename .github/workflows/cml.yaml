@@ -23,41 +23,17 @@ jobs:
       - name: "Train Model"
         run: |
           python main.py
-      - name: "Upload evaluation report"
-        uses: actions/upload-artifact@v2
-        with:
-          name: evaluation_report_main
-          path: outputs
-
-  generate-comment:
-    needs: train-model
-    runs-on: ubuntu-latest
-    steps:
-      - name: "Setup CML"
-        uses: iterative/setup-cml@v1
-        with:
-          version: 'latest'
-      - name: "Set up Python"
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
-      - name: "Checkout code"
-        uses: actions/checkout@v3
-      - name: "Download evaluation report"
-        uses: actions/download-artifact@v2
-        with:
-          name: evaluation_report_main
       - name: "Send CML Report"
         run: |
           echo "## Model Report" > report.md
           cat evaluation_report.txt >> report.md
           echo "## Model Visualization" >> report.md
           echo "### Model Architecture" >> report.md
-          echo "![](./model_architecture.png)" >> report.md
+          echo "![](outputs/model_architecture.png)" >> report.md
           echo "### Accuracy Plot" >> report.md
-          echo "![](./accuracy_plot.png)" >> report.md
+          echo "![](outputs/accuracy_plot.png)" >> report.md
           echo "### Loss Plot" >> report.md
-          echo "![](./loss_plot.png)" >> report.md
+          echo "![](outputs/loss_plot.png)" >> report.md
           cml comment create report.md
         env:
           REPO_TOKEN: ${{ secrets.TOKEN }}
