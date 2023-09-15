@@ -16,6 +16,9 @@ def main():
     # Train the model
     model.train(X_train, y_train, X_test, y_test)
     
+    # Save the model
+    model.save("models/model.h5")
+    
     # Evaluate the model
     model.evaluate_model(X_test, y_test)
 

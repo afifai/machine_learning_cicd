@@ -63,3 +63,19 @@ class SpamDetectorModel:
         
         print("Classification Report:")
         print(classification_report(y_true, y_pred_classes))
+
+    def save(self, filepath):
+        """
+        Save the model to the given filepath.
+        """
+        self.model.save(filepath)
+    
+    @classmethod
+    def load(cls, filepath):
+        """
+        Load a saved model from the given filepath.
+        """
+        loaded_model = load_model(filepath)
+        instance = cls()
+        instance.model = loaded_model
+        return instance
