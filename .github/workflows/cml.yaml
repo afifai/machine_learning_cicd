@@ -44,6 +44,7 @@ jobs:
       - name: "Send CML Report"
         run: |
           echo "## Model Report" > report.md
+          ls -R
           cat evaluation_report_main/evaluation_report.txt >> report.md
           cml comment create report.md
         env:
