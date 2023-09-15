@@ -44,6 +44,7 @@ jobs:
           name: evaluation_report_main
       - name: "Send CML Report"
         run: |
+          ls -R
           echo "## Model Report" > report.md
           cat evaluation_report.txt >> report.md
           echo "## Model Visualization" >> report.md
