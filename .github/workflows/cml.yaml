@@ -13,7 +13,7 @@ jobs:
   run:
     runs-on: ubuntu-latest
     container:
-      image: docker://dvcorg/cml:0.3.0
+      image: docker://ghcr.io/iterative/cml:0-dvc2-base1
     steps:
       - uses: actions/checkout@v2
       - name: "Set up Python"
