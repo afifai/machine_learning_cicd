@@ -78,12 +78,12 @@ jobs:
       - name: "Send CML Report"
         run: |
           echo "## Model Report" > report.md
-          echo "### Validation Metrics" > report.md
+          echo "### Validation Metrics" >> report.md
           cat evaluation_report_validation.txt >> report.md
-          echo "---" >> report.md
-          echo "### Testing Metrics" > report.md
+          echo "\n" >> report.md
+          echo "### Testing Metrics" >> report.md
           cat evaluation_report_test.txt >> report.md
-          echo "---" >> report.md
+          echo "\n" >> report.md
           echo "## Model Visualization" >> report.md
           echo "### Model Architecture" >> report.md
           echo "![](./model_architecture.png)" >> report.md
