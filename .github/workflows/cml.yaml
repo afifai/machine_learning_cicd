@@ -9,7 +9,6 @@ jobs:
       - name: "Set up Python"
         run: |
           apt-get update -y
-          apt-get install --no-install-recommends -y python3.8 python3-pip
           pip install --upgrade pip
       - name: "Install dependencies"
         run: |
@@ -25,17 +24,19 @@ jobs:
   generate-comment:
     needs: train-model
     runs-on: ubuntu-latest
-    container: docker://ghcr.io/iterative/cml:0-dvc2-base1
 
     steps:
     - name: Download evaluation report
-      uses: actions/download-artifact@v2
+    - uses: actions/download-artifact@v2
       with:
         name: evaluation_report
-
     - name: Send CML Report
+    - uses: iterative/setup-cml@v1
+    - uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
       run: |
         cat evaluation_report.txt >> report.md
-        cml comment create report.md
+        cml comment create --pr --publish report.md
       env:
         REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
