@@ -29,10 +29,6 @@ jobs:
     needs: train-model
     runs-on: ubuntu-latest
     steps:
-      - name: "Download evaluation report"
-        uses: actions/download-artifact@v2
-        with:
-          name: evaluation_report
       - name: "Setup CML"
         uses: iterative/setup-cml@v1
       - name: "Set up Python"
@@ -41,6 +37,10 @@ jobs:
           python-version: '3.x'
       - name: "Checkout code"
         uses: actions/checkout@v3
+      - name: "Download evaluation report"
+        uses: actions/download-artifact@v2
+        with:
+          name: evaluation_report
       - name: "Send CML Report"
         run: |
           cat evaluation_report.txt >> report.md
