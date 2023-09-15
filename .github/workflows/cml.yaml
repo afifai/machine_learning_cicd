@@ -23,6 +23,6 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # Generate the model report
-          python -c 'from model import SpamDetectorModel; model = SpamDetectorModel.load("models/model.h5"); model.evaluate_model()' > report.md
+          python -c 'from model import SpamDetectorModel; model = SpamDetectorModel.load("models/model.tf"); model.evaluate_model()' > report.md
           # Publish the report as a comment in the pull request
           cml-send-comment report.md

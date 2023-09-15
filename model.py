@@ -68,14 +68,14 @@ class SpamDetectorModel:
         """
         Save the model to the given filepath.
         """
-        self.model.save(filepath)
+        self.model.save(filepath, save_format='tf')
     
     @classmethod
     def load(cls, filepath):
         """
         Load a saved model from the given filepath.
         """
-        loaded_model = load_model(filepath)
+        loaded_model = load_model(filepath, custom_objects={'TextVectorization': TextVectorization})
         instance = cls()
         instance.model = loaded_model
         return instance
