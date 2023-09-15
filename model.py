@@ -1,3 +1,4 @@
+import numpy as np
 import tensorflow as tf
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.layers.experimental.preprocessing import TextVectorization
