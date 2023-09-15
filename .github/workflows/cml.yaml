@@ -35,6 +35,10 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
+      - name: "Set up Graphviz"
+        run: |
+          apt-get update -y
+          apt install graphviz -y
       - name: "Checkout code"
         uses: actions/checkout@v3
       - name: "Download evaluation report"
@@ -45,6 +49,13 @@ jobs:
         run: |
           echo "## Model Report" > report.md
           cat evaluation_report.txt >> report.md
+          echo "## Model Visualization" >> report.md
+          echo "### Model Architecture" >> report.md
+          echo '![](./model_architecture.png "Model Architecture")' >> report.md
+          echo "### Accuracy Plot" >> report.md
+          echo '![](./accuracy_plot.png "Accuracy Plot")' >> report.md
+          echo "### Loss Plot" >> report.md
+          echo '![](./loss_plot.png "Loss Plot")' >> report.md
           cml comment create report.md
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
