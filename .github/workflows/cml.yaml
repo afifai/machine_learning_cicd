@@ -22,4 +22,6 @@ jobs:
       - name: "Send CML Report"
         run: |
           cat evaluation_report.txt >> report.md
-          cml comment create --pr --publish report.md
+          cml comment create report.md
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
