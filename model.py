@@ -3,6 +3,7 @@ from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.layers.experimental.preprocessing import TextVectorization
 from tensorflow.keras import layers
 from tensorflow.keras.models import load_model
+from sklearn.metrics import classification_report
 
 class SpamDetectorModel:
     def __init__(self, max_vocab_length=None, output_dim=None):
@@ -42,6 +43,17 @@ class SpamDetectorModel:
         """
         self.text_vectorization.adapt(X_train)
         self.model.fit(X_train, y_train, epochs=5, validation_data=(X_val, y_val))
+
+    def evaluate_model(self, X_test, y_test):
+        """
+        Evaluate the model and print a classification report.
+        """
+        y_pred = self.model.predict(X_test)
+        y_pred_classes = np.argmax(y_pred, axis=1)
+        y_true = np.argmax(y_test, axis=1)
+        
+        print("Classification Report:")
+        print(classification_report(y_true, y_pred_classes))
     
     def save(self, filepath):
         """
