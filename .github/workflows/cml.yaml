@@ -38,7 +38,7 @@ jobs:
         with:
           version: 'latest'
       - name: "Set up Python"
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: '3.x'
       - name: "Checkout code"
@@ -53,11 +53,11 @@ jobs:
           cat evaluation_report.txt >> report.md
           echo "## Model Visualization" >> report.md
           echo "### Model Architecture" >> report.md
-          echo '![](model_architecture.png)' >> report.md
+          echo "![](./model_architecture.png)" >> report.md
           echo "### Accuracy Plot" >> report.md
-          echo '![](accuracy_plot.png)' >> report.md
+          echo "![](./accuracy_plot.png)" >> report.md
           echo "### Loss Plot" >> report.md
-          echo '![](loss_plot.png)' >> report.md
+          echo "![](./loss_plot.png)" >> report.md
           cml comment create report.md
         env:
           REPO_TOKEN: ${{ secrets.TOKEN }}
