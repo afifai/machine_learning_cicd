@@ -1,0 +1,37 @@
+name: "Train-Model"
+on:
+  push:
+    paths:
+      - 'data/**'
+      - 'models/**'
+      - 'utils/**'
+      - 'main.py'
+      - 'model.py'
+      - 'requirements.txt'
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    container:
+      image: docker://dvcorg/cml:0.3.0
+    steps:
+      - uses: actions/checkout@v2
+      - name: "Set up Python"
+        run: |
+          apt-get update -y
+          apt-get install --no-install-recommends -y python3.8 python3-pip
+          pip install --upgrade pip
+      - name: "Install dependencies"
+        run: |
+          pip install -r requirements.txt
+      - name: "Train Model"
+        run: |
+          python main.py
+      - name: "Generate and Publish Report"
+        env:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Generate the model report
+          python -c 'from model import SpamDetectorModel; model = SpamDetectorModel.load("models/model.h5"); model.evaluate_model()' > report.md
+          # Publish the report as a comment in the pull request
+          cml-send-comment report.md
