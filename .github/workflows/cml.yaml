@@ -22,13 +22,41 @@ jobs:
           pip install -r requirements.txt
       - name: "Train Model"
         run: |
-          python main.py
+          python main.py --train
       - name: "Upload evaluation report"
         uses: actions/upload-artifact@v2
         with:
           name: evaluation_report_main
           path: outputs
-
+      - name: "Upload model"
+        uses: actions/upload-artifact@v2
+        with:
+          name: model_main
+          path: models
+  test-model:
+    runs-on: ubuntu-latest
+    container: docker://ghcr.io/iterative/cml:0-dvc2-base1
+    steps:
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '16'
+      - uses: actions/checkout@v3
+      - name: "Set up Python"
+        run: |
+          apt-get update -y
+          apt install graphviz -y
+          pip install --upgrade pip
+      - name: "Install dependencies"
+        run: |
+          pip install -r requirements.txt
+      - name: "Test Model"
+        run: |
+          python main.py --test
+      - name: "Upload evaluation report"
+        uses: actions/upload-artifact@v2
+        with:
+          name: evaluation_report_main
+          path: outputs
   generate-comment:
     needs: train-model
     runs-on: ubuntu-latest
@@ -47,7 +75,11 @@ jobs:
       - name: "Send CML Report"
         run: |
           echo "## Model Report" > report.md
-          cat evaluation_report.txt >> report.md
+          echo "### Validation Metrics" > report.md
+          cat evaluation_report_validation.txt >> report.md
+          echo "---" >> report.md
+          echo "### Testing Metrics" > report.md
+          cat evaluation_report_test.txt >> report.md
           echo "---" >> report.md
           echo "## Model Visualization" >> report.md
           echo "### Model Architecture" >> report.md

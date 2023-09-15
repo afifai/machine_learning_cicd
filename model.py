@@ -63,7 +63,7 @@ class SpamDetectorModel:
         # Save model architecture as png
         plot_model(self.model, to_file='outputs/model_architecture.png', show_shapes=True, show_layer_names=True)
 
-    def evaluate_model(self, X_test, y_test, branch='main'):
+    def evaluate_model(self, X_test, y_test, branch='main', stage='validation'):
         """
         Evaluate the model and print a classification report.
         Optionally, save the report to a text file.
@@ -72,27 +72,29 @@ class SpamDetectorModel:
         # Predict and extract the classes
         y_pred = self.model.predict(X_test)
         y_pred_classes = np.argmax(y_pred, axis=1)
-        y_true = np.argmax(y_test, axis=1)
+        if stage == 'validation':
+            y_test = np.argmax(y_test, axis=1)
 
         # Generate and format the classification report
-        report_dict = classification_report(y_true, y_pred_classes, output_dict=True)
-        report_str = self._format_classification_report(report_dict)
+        report_dict = classification_report(y_test, y_pred_classes, output_dict=True)
+        report_str = self._format_classification_report(report_dict, stage)
 
         # Save report to text and pickle files
-        self._save_report_to_file(report_str, "outputs/evaluation_report.txt")
-        self._save_metrics_to_pickle(report_dict, f"outputs/metrics_{branch}.pkl")
+        self._save_report_to_file(report_str, f"outputs/evaluation_report_{stage}.txt")
+        self._save_metrics_to_pickle(report_dict, f"outputs/metrics_{branch}_{stage}.pkl")
 
         # Print the formatted report
         print(report_str)
 
-    def _format_classification_report(self, report_dict):
-        return f"""Classification Report:
+    def _format_classification_report(self, report_dict, stage):
+        return f"""Classification Report {stage.capitalize()}:
     | Metrics     | Main Branch   |
     |-------------|---------------|
     | Accuracy    | {report_dict['accuracy']:.2f}          |
     | Precision   | {report_dict['1']['precision']:.2f}    |
     | Recall      | {report_dict['1']['recall']:.2f}       |
     | F1-Score    | {report_dict['1']['f1-score']:.2f}     |
+
     """
 
     def _save_report_to_file(self, report_str, filepath):
@@ -115,5 +117,5 @@ class SpamDetectorModel:
         Load a saved model from the given filepath.
         """
         instance = cls()
-        instance.model = load_model(filepath, custom_objects={'TextVectorization': TextVectorization})
+        instance.model = load_model(filepath)
         return instance
