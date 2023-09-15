@@ -3,8 +3,7 @@ from model import SpamDetectorModel
 
 def main():
     # Load and prepare data
-    url = "https://raw.githubusercontent.com/afifai/hacktiv8-trial-class-spamdetector/main/data/dataset_sms_spam%20_v1.csv"
-    df = load_dataset(url)
+    df = load_dataset()
     X_train, X_test, y_train, y_test = split_data(df)
     
     # Initialize and train the model
@@ -20,7 +19,7 @@ def main():
     model.save("models/model.tf")
     
     # Evaluate the model
-    model.evaluate_model(X_test, y_test)
+    model.evaluate_model(X_test, y_test, output_file="evaluation_report.txt")
 
 if __name__ == "__main__":
     main()

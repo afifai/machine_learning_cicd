@@ -2,11 +2,19 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.utils import to_categorical
 
-def load_dataset(url):
+def load_dataset(path='data/train.csv'):
     """
-    Load dataset from a given URL.
+    Load dataset from a given path.
     """
-    return pd.read_csv(url)
+    return pd.read_csv(path)
+
+def load_test_data(path='data/test.csv'):
+    """
+    Load dataset from a given path.
+    """
+    df = pd.read_csv(path)
+    X, y = df.Teks, df.label
+    return X, y
 
 def prepare_target(y_train, y_test):
     """
@@ -25,3 +33,4 @@ def split_data(df):
     X_test, y_test = test_df.Teks, test_df.label
     y_train, y_test = prepare_target(y_train, y_test)
     return X_train, X_test, y_train, y_test
+

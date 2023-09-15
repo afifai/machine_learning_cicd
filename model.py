@@ -45,16 +45,23 @@ class SpamDetectorModel:
         self.text_vectorization.adapt(X_train)
         self.model.fit(X_train, y_train, epochs=5, validation_data=(X_val, y_val))
 
-    def evaluate_model(self, X_test, y_test):
+    def evaluate_model(self, X_test, y_test, output_file=None):
         """
         Evaluate the model and print a classification report.
+        Optionally, save the report to a text file.
         """
         y_pred = self.model.predict(X_test)
         y_pred_classes = np.argmax(y_pred, axis=1)
         y_true = np.argmax(y_test, axis=1)
         
-        print("Classification Report:")
-        print(classification_report(y_true, y_pred_classes))
+        report_str = "Classification Report:\n"
+        report_str += classification_report(y_true, y_pred_classes)
+        
+        if output_file is not None:
+            with open(output_file, "w") as f:
+                f.write(report_str)
+        
+        print(report_str)
     
     def save(self, filepath):
         """

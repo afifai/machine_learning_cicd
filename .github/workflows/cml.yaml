@@ -1,7 +1,7 @@
 name: "Train-Model"
 on: [push]
 jobs:
-  run:
+  train-model:
     runs-on: ubuntu-latest
     container:
       image: docker://ghcr.io/iterative/cml:0-dvc2-base1
@@ -18,11 +18,23 @@ jobs:
       - name: "Train Model"
         run: |
           python main.py
-      - name: "Generate and Publish Report"
-        env:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          # Generate the model report
-          python -c 'from model import SpamDetectorModel; model = SpamDetectorModel.load("models/model.tf"); model.evaluate_model()' > report.md
-          # Publish the report as a comment in the pull request
-          cml-send-comment report.md
+      - name: Upload evaluation report
+        uses: actions/upload-artifact@v2
+        with:
+          name: evaluation_report
+          path: evaluation_report.txt
+  generate-comment:
+    needs: train-model
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Download evaluation report
+      uses: actions/download-artifact@v2
+      with:
+        name: evaluation_report
+
+    - name: Send CML Report
+      run: |
+        cml-send-comment evaluation_report.txt
+      env:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
