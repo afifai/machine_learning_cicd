@@ -22,8 +22,8 @@ jobs:
       - name: "Upload evaluation report"
         uses: actions/upload-artifact@v2
         with:
-          name: evaluation_report
-          path: evaluation_report.txt
+          name: evaluation_report_main
+          path: outputs
 
   generate-comment:
     needs: train-model
@@ -40,10 +40,11 @@ jobs:
       - name: "Download evaluation report"
         uses: actions/download-artifact@v2
         with:
-          name: evaluation_report
+          name: evaluation_report_main
       - name: "Send CML Report"
         run: |
-          cat evaluation_report.txt >> report.md
+          echo "## Model Report" > report.md
+          cat outputs/evaluation_report.txt >> report.md
           cml comment create report.md
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}

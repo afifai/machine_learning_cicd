@@ -1,4 +1,7 @@
+import os
+import pickle
 import numpy as np
+import pandas as pd
 import tensorflow as tf
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.layers.experimental.preprocessing import TextVectorization
@@ -45,7 +48,7 @@ class SpamDetectorModel:
         self.text_vectorization.adapt(X_train)
         self.model.fit(X_train, y_train, epochs=5, validation_data=(X_val, y_val))
 
-    def evaluate_model(self, X_test, y_test, output_file=None):
+    def evaluate_model(self, X_test, y_test, branch='main'):
         """
         Evaluate the model and print a classification report.
         Optionally, save the report to a text file.
@@ -55,12 +58,20 @@ class SpamDetectorModel:
         y_true = np.argmax(y_test, axis=1)
         
         report_str = "Classification Report:\n"
-        report_str += classification_report(y_true, y_pred_classes)
-        
-        if output_file is not None:
-            with open(output_file, "w") as f:
-                f.write(report_str)
-        
+        report_dict = classification_report(y_true, y_pred_classes, output_dict=True)
+        report_str += f"""| Metrics   	| Main Branch 	|
+|-----------	|-------------	|
+| Accuracy  	|       {report_dict['accuracy']} %     	|
+| Precision 	|       {report_dict['1']['precision']} %     	|
+| Recall    	|       {report_dict['1']['recall']} %     	|
+| F1-Score  	|       {report_dict['1']['f1-score']} %     	|
+"""
+
+        with open("outputs/evaluation_report.txt", "w") as f:
+            f.write(report_str)
+        with open(f"outputs/metrics_{branch}.pkl", "wb") as f:
+            pickle.dump(report_dict, f)
+
         print(report_str)
     
     def save(self, filepath):

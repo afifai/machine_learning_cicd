@@ -19,7 +19,7 @@ def main():
     model.save("models/model.tf")
     
     # Evaluate the model
-    model.evaluate_model(X_test, y_test, output_file="evaluation_report.txt")
+    model.evaluate_model(X_test, y_test)
 
 if __name__ == "__main__":
     main()
