@@ -8,9 +8,6 @@ jobs:
     runs-on: ubuntu-latest
     container: docker://ghcr.io/iterative/cml:0-dvc2-base1
     steps:
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '16'
       - uses: actions/checkout@v3
       - name: "Set up Python"
         run: |
@@ -38,9 +35,6 @@ jobs:
     runs-on: ubuntu-latest
     container: docker://ghcr.io/iterative/cml:0-dvc2-base1
     steps:
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '16'
       - uses: actions/checkout@v3
       - name: "Set up Python"
         run: |
