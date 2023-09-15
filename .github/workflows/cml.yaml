@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     container: docker://ghcr.io/iterative/cml:0-dvc2-base1
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: "Set up Python"
         run: |
           apt-get update -y
@@ -40,6 +40,7 @@ jobs:
         with:
           python-version: '3.x'
       - name: "Send CML Report"
+        uses: actions/checkout@v3
         run: |
           cat evaluation_report.txt >> report.md
           cml comment create report.md
