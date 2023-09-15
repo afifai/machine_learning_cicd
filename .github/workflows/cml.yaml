@@ -56,4 +56,4 @@ jobs:
           echo '![](./loss_plot.png "Loss Plot")' >> report.md
           cml comment create report.md
         env:
-          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO_TOKEN: ${{ secrets.TOKEN }}
