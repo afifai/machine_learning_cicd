@@ -1,14 +1,5 @@
 name: "Train-Model"
-on:
-  push:
-    paths:
-      - 'data/**'
-      - 'models/**'
-      - 'utils/**'
-      - 'main.py'
-      - 'model.py'
-      - 'requirements.txt'
-
+on: [push]
 jobs:
   run:
     runs-on: ubuntu-latest
