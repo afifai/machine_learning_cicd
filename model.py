@@ -2,6 +2,7 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.keras import layers
 from tensorflow.keras.layers.experimental.preprocessing import TextVectorization
+from tensorflow.keras.models import load_model
 from sklearn.metrics import classification_report
 
 class SpamDetectorModel:
