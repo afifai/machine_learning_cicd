@@ -48,6 +48,7 @@ jobs:
         run: |
           echo "## Model Report" > report.md
           cat evaluation_report.txt >> report.md
+          echo "---" >> report.md
           echo "## Model Visualization" >> report.md
           echo "### Model Architecture" >> report.md
           echo "![](./model_architecture.png)" >> report.md
