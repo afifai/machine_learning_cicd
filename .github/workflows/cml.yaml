@@ -38,4 +38,4 @@ jobs:
         cat evaluation_report.txt >> report.md
         cml comment create report.md
       env:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
