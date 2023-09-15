@@ -1,5 +1,8 @@
 name: "Train-Model"
-on: [push]
+
+on:
+  push:
+  
 jobs:
   train-model:
     runs-on: ubuntu-latest
@@ -16,27 +19,29 @@ jobs:
       - name: "Train Model"
         run: |
           python main.py
-      - name: Upload evaluation report
+      - name: "Upload evaluation report"
         uses: actions/upload-artifact@v2
         with:
           name: evaluation_report
           path: evaluation_report.txt
+
   generate-comment:
     needs: train-model
     runs-on: ubuntu-latest
-
     steps:
-    - name: Download evaluation report
-    - uses: actions/download-artifact@v2
-      with:
-        name: evaluation_report
-    - name: Send CML Report
-    - uses: iterative/setup-cml@v1
-    - uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'
-      run: |
-        cat evaluation_report.txt >> report.md
-        cml comment create --pr --publish report.md
-      env:
-        REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: "Download evaluation report"
+        uses: actions/download-artifact@v2
+        with:
+          name: evaluation_report
+      - name: "Setup CML"
+        uses: iterative/setup-cml@v1
+      - name: "Set up Python"
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: "Send CML Report"
+        run: |
+          cat evaluation_report.txt >> report.md
+          cml comment create --pr --publish report.md
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
