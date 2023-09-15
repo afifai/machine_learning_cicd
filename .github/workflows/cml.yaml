@@ -53,11 +53,11 @@ jobs:
           cat evaluation_report.txt >> report.md
           echo "## Model Visualization" >> report.md
           echo "### Model Architecture" >> report.md
-          echo '![](./model_architecture.png "Model Architecture")' >> report.md
+          echo '![](model_architecture.png)' >> report.md
           echo "### Accuracy Plot" >> report.md
-          echo '![](./accuracy_plot.png "Accuracy Plot")' >> report.md
+          echo '![](accuracy_plot.png)' >> report.md
           echo "### Loss Plot" >> report.md
-          echo '![](./loss_plot.png "Loss Plot")' >> report.md
+          echo '![](loss_plot.png)' >> report.md
           cml comment create report.md
         env:
           REPO_TOKEN: ${{ secrets.TOKEN }}
