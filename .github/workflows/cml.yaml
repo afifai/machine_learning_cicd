@@ -50,13 +50,17 @@ jobs:
       - name: "Install dependencies"
         run: |
           pip install -r requirements.txt
+      - name: "Download Model"
+        uses: actions/download-artifact@v2
+        with:
+          name: model_main
       - name: "Test Model"
         run: |
           python main.py --test
       - name: "Upload evaluation report"
         uses: actions/upload-artifact@v2
         with:
-          name: evaluation_report_main
+          name: test_report_main
           path: outputs
   generate-comment:
     needs: test-model
@@ -73,6 +77,10 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: evaluation_report_main
+      - name: "Download test report"
+        uses: actions/download-artifact@v2
+        with:
+          name: test_report_main
       - name: "Send CML Report"
         run: |
           echo "## Model Report" > report.md
