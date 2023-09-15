@@ -34,6 +34,7 @@ jobs:
           name: model_main
           path: models
   test-model:
+    needs: train-model
     runs-on: ubuntu-latest
     container: docker://ghcr.io/iterative/cml:0-dvc2-base1
     steps:
@@ -58,7 +59,7 @@ jobs:
           name: evaluation_report_main
           path: outputs
   generate-comment:
-    needs: train-model
+    needs: test-model
     runs-on: ubuntu-latest
     container: docker://ghcr.io/iterative/cml:0-dvc2-base1
     steps:
