@@ -1,4 +1,4 @@
-matplotlib==3.8.0
+matplotlib==3.7.3
 numpy==1.24.3
 pandas==2.0.3
 pydot==1.4.2
