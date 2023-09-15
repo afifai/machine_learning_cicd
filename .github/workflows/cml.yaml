@@ -26,7 +26,7 @@ jobs:
       - name: "Send CML Report"
         run: |
           echo "## Model Report" > report.md
-          cat evaluation_report.txt >> report.md
+          cat outputs/evaluation_report.txt >> report.md
           echo "## Model Visualization" >> report.md
           echo "### Model Architecture" >> report.md
           echo "![](outputs/model_architecture.png)" >> report.md
