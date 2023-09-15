@@ -93,6 +93,8 @@ class SpamDetectorModel:
     | Precision   | {report_dict['1']['precision']:.2f}    |
     | Recall      | {report_dict['1']['recall']:.2f}       |
     | F1-Score    | {report_dict['1']['f1-score']:.2f}     |
+
+    
     """
 
     def _save_report_to_file(self, report_str, filepath):
