@@ -12,6 +12,7 @@ jobs:
       - name: "Set up Python"
         run: |
           apt-get update -y
+          apt install graphviz -y
           pip install --upgrade pip
       - name: "Install dependencies"
         run: |
@@ -35,10 +36,6 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
-      - name: "Set up Graphviz"
-        run: |
-          apt-get update -y
-          apt install graphviz -y
       - name: "Checkout code"
         uses: actions/checkout@v3
       - name: "Download evaluation report"
