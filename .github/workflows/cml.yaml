@@ -52,10 +52,8 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: evaluation_report_main
-          path: outputs
       - name: "Train Model"
         run: |
-          ls -R
           python main.py --train --experiment
       - name: "Upload evaluation report"
         uses: actions/upload-artifact@v2
@@ -111,10 +109,14 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: model_experiment
-      - name: "Download main test metrics"
+      - name: "Download main validation metrics"
         uses: actions/download-artifact@v2
         with:
           name: evaluation_report_main
+      - name: "Download main test metrics"
+        uses: actions/download-artifact@v2
+        with:
+          name: test_report_main
       - name: "Test Model"
         run: |
           python main.py --test --experiment
@@ -161,7 +163,7 @@ jobs:
           echo "![](./loss_plot_main.png)" >> report.md
           cml comment create report.md
         env:
-          REPO_TOKEN: ${{ secrets.TOKEN }}
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   generate-comment-experiment:
     needs: [train-model-main,train-model-experiment, test-model-main, test-model-experiment]
     runs-on: ubuntu-latest
@@ -208,4 +210,4 @@ jobs:
           echo "![](./loss_plot_main.png)" >> report.md
           cml comment create report.md
         env:
-          REPO_TOKEN: ${{ secrets.TOKEN }}
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
