@@ -54,7 +54,6 @@ jobs:
           name: evaluation_report_main
       - name: "Train Model"
         run: |
-          ls -R
           python main.py --train --experiment
       - name: "Upload evaluation report"
         uses: actions/upload-artifact@v2
@@ -121,7 +120,6 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: test_report_experiment
-          path: outputs
   generate-comment-main:
     if: github.event_name == 'push'
     needs: test-model-main
