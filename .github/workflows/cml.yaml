@@ -10,7 +10,6 @@ on:
 
 jobs:
   train-model-main:
-    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     container: docker://ghcr.io/iterative/cml:0-dvc2-base1
     steps:
@@ -38,10 +37,11 @@ jobs:
           path: models
   train-model-experiment:
     if: github.event_name == 'pull_request'
+    needs: train-model-main
     runs-on: ubuntu-latest
     container: docker://ghcr.io/iterative/cml:0-dvc2-base1
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3 
       - name: "Set up Python"
         run: |
           apt-get update -y
@@ -51,12 +51,8 @@ jobs:
         run: |
           pip install -r requirements.txt
       - name: "Download main validation metrics"
-        uses: dawidd6/action-download-artifact@v2
+        uses: actions/download-artifact@v2
         with:
-          github_token: ${{secrets.GITHUB_TOKEN}}
-          workflow: "cml.yml"
-          branch: main
-          event: push
           name: evaluation_report_main
           path: outputs
       - name: "Train Model"
@@ -99,7 +95,7 @@ jobs:
           name: test_report_main
           path: outputs
   test-model-experiment:
-    needs: train-model-experiment
+    needs: [train-model-main,train-model-experiment, test-model-main]
     runs-on: ubuntu-latest
     container: docker://ghcr.io/iterative/cml:0-dvc2-base1
     steps:
@@ -167,7 +163,7 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.TOKEN }}
   generate-comment-experiment:
-    needs: test-model-experiment
+    needs: [train-model-main,train-model-experiment, test-model-main, test-model-experiment]
     runs-on: ubuntu-latest
     container: docker://ghcr.io/iterative/cml:0-dvc2-base1
     steps:
@@ -209,7 +205,7 @@ jobs:
           echo "#### Main" >> report.md
           echo "![](./loss_plot_main.png)" >> report.md
           echo "#### Experiment" >> report.md
-          echo "![](./loss_plot_experiment.png)" >> report.md
+          echo "![](./loss_plot_main.png)" >> report.md
           cml comment create report.md
         env:
           REPO_TOKEN: ${{ secrets.TOKEN }}
