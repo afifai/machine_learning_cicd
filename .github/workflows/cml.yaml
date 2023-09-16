@@ -115,6 +115,7 @@ jobs:
           name: evaluation_report_main
       - name: "Test Model"
         run: |
+          ls -R
           python main.py --test --experiment
       - name: "Upload evaluation report"
         uses: actions/upload-artifact@v2
