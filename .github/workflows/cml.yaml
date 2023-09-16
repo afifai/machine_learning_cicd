@@ -163,7 +163,7 @@ jobs:
           echo "![](./loss_plot_main.png)" >> report.md
           cml comment create report.md
         env:
-          REPO_TOKEN: ${{ secrets.TOKEN }}
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   generate-comment-experiment:
     needs: [train-model-main,train-model-experiment, test-model-main, test-model-experiment]
     runs-on: ubuntu-latest
@@ -210,4 +210,4 @@ jobs:
           echo "![](./loss_plot_main.png)" >> report.md
           cml comment create report.md
         env:
-          REPO_TOKEN: ${{ secrets.TOKEN }}
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
