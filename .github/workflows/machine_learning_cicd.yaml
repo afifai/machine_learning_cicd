@@ -11,7 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     container: docker://ghcr.io/iterative/cml:0-dvc2-base1
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout Code
+        uses: actions/checkout@v3
       - name: "Set up Python"
         run: |
           apt-get update -y
@@ -39,7 +40,12 @@ jobs:
     runs-on: ubuntu-latest
     container: docker://ghcr.io/iterative/cml:0-dvc2-base1
     steps:
-      - uses: actions/checkout@v3 
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      - name: Checkout PR branch
+        run: git fetch origin ${{ github.head_ref }}:${{ github.head_ref }}
+      - name: Switch to PR branch
+        run: git checkout ${{ github.head_ref }}
       - name: "Set up Python"
         run: |
           apt-get update -y
@@ -71,7 +77,8 @@ jobs:
     runs-on: ubuntu-latest
     container: docker://ghcr.io/iterative/cml:0-dvc2-base1
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout Code
+        uses: actions/checkout@v3
       - name: "Set up Python"
         run: |
           apt-get update -y
@@ -98,7 +105,12 @@ jobs:
     runs-on: ubuntu-latest
     container: docker://ghcr.io/iterative/cml:0-dvc2-base1
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      - name: Checkout PR branch
+        run: git fetch origin ${{ github.head_ref }}:${{ github.head_ref }}
+      - name: Switch to PR branch
+        run: git checkout ${{ github.head_ref }}
       - name: "Set up Python"
         run: |
           apt-get update -y
