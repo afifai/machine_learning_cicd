@@ -58,6 +58,7 @@ jobs:
           branch: main
           event: push
           name: evaluation_report_main
+          path: outputs
       - name: "Train Model"
         run: |
           python main.py --train --experiment
