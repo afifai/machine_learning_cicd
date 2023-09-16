@@ -61,12 +61,6 @@ jobs:
     runs-on: ubuntu-latest
     container: docker://ghcr.io/iterative/cml:0-dvc2-base1
     steps:
-      - name: "Set up Python"
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
-      - name: "Checkout code"
-        uses: actions/checkout@v3
       - name: "Download evaluation report"
         uses: actions/download-artifact@v2
         with:
