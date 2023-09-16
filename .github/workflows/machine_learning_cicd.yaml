@@ -42,6 +42,10 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
+      - name: Configure Git
+        run: git config --global --add safe.directory /__w/machine_learning_cicd/machine_learning_cicd
+      - name: Change directory ownership
+        run: sudo chown -R $(whoami) /__w/machine_learning_cicd/machine_learning_cicd
       - name: Checkout PR branch
         run: git fetch origin ${{ github.head_ref }}:${{ github.head_ref }}
       - name: Switch to PR branch
@@ -107,6 +111,10 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
+      - name: Configure Git
+        run: git config --global --add safe.directory /__w/machine_learning_cicd/machine_learning_cicd
+      - name: Change directory ownership
+        run: sudo chown -R $(whoami) /__w/machine_learning_cicd/machine_learning_cicd
       - name: Checkout PR branch
         run: git fetch origin ${{ github.head_ref }}:${{ github.head_ref }}
       - name: Switch to PR branch
