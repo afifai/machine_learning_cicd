@@ -86,11 +86,11 @@ jobs:
           echo "\n" >> report.md
           echo "## Model Visualization" >> report.md
           echo "### Model Architecture" >> report.md
-          echo "![](./model_architecture.png)" >> report.md
+          echo "![](./model_architecture_main.png)" >> report.md
           echo "### Accuracy Plot" >> report.md
-          echo "![](./accuracy_plot.png)" >> report.md
+          echo "![](./accuracy_plot_main.png)" >> report.md
           echo "### Loss Plot" >> report.md
-          echo "![](./loss_plot.png)" >> report.md
+          echo "![](./loss_plot_main.png)" >> report.md
           cml comment create report.md
         env:
           REPO_TOKEN: ${{ secrets.TOKEN }}

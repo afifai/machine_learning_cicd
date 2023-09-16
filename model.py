@@ -36,7 +36,7 @@ class SpamDetectorModel:
                            optimizer='adam',
                            metrics=["accuracy"])
 
-    def train(self, X_train, y_train, X_val, y_val):
+    def train(self, X_train, y_train, X_val, y_val, branch='main'):
         self.text_vectorization.adapt(X_train)
         history = self.model.fit(X_train, y_train, epochs=5, validation_data=(X_val, y_val))
 
@@ -44,24 +44,24 @@ class SpamDetectorModel:
         plt.figure(figsize=[8, 6])
         plt.plot(history.history['accuracy'])
         plt.plot(history.history['val_accuracy'])
-        plt.title('Model accuracy')
+        plt.title(f'Model Accuracy {branch.capitalize()}')
         plt.ylabel('Accuracy')
         plt.xlabel('Epoch')
         plt.legend(['Train', 'Val'], loc='upper left')
-        plt.savefig('outputs/accuracy_plot.png')
+        plt.savefig(f'outputs/accuracy_plot_{branch}.png')
 
         # Plot training & validation loss values
         plt.figure(figsize=[8, 6])
         plt.plot(history.history['loss'])
         plt.plot(history.history['val_loss'])
-        plt.title('Model loss')
+        plt.title(f'Model Loss {branch.capitalize()}')
         plt.ylabel('Loss')
         plt.xlabel('Epoch')
         plt.legend(['Train', 'Val'], loc='upper left')
-        plt.savefig('outputs/loss_plot.png')
+        plt.savefig(f'outputs/loss_plot_{branch}.png')
         
         # Save model architecture as png
-        plot_model(self.model, to_file='outputs/model_architecture.png', show_shapes=True, show_layer_names=True)
+        plot_model(self.model, to_file=f'outputs/model_architecture_{branch}.png', show_shapes=True, show_layer_names=True)
 
     def evaluate_model(self, X_test, y_test, branch='main', stage='validation'):
         """
