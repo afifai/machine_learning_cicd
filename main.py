@@ -2,7 +2,7 @@ import argparse
 from utils.data_utils import load_dataset, split_data, load_test_data
 from model import SpamDetectorModel
 
-def train():
+def train(branch='main'):
     # Load and prepare data
     df = load_dataset()
     X_train, X_test, y_train, y_test = split_data(df)
@@ -14,26 +14,27 @@ def train():
     model.model.layers[1].adapt(X_train)
     
     # Train the model
-    model.train(X_train, y_train, X_test, y_test)
+    model.train(X_train, y_train, X_test, y_test, branch)
     
     # Save the model
-    model.save("models/model.tf")
+    model.save(f"models/model_{branch}.tf")
     
     # Evaluate the model
-    model.evaluate_model(X_test, y_test)
+    model.evaluate_model(X_test, y_test, branch)
 
-def test():
+def test(branch='main'):
     # Load data testing
     X_test, y_test = load_test_data()
-    model = SpamDetectorModel.load('model.tf')
+    model = SpamDetectorModel.load(f'model_{branch}.tf')
     # Evaluate the model
-    model.evaluate_model(X_test, y_test, stage='test')
+    model.evaluate_model(X_test, y_test, branch, stage='test')
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument('--train', action='store_true')
     ap.add_argument('--test', action='store_true')
     args = vars(ap.parse_args())
+
 
     if args['train']:
         train()
