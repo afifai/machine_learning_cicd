@@ -13,10 +13,9 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
-      - name: Configure Git
-        run: git config --global --add safe.directory /__w/machine_learning_cicd/machine_learning_cicd
-      - name: Change directory ownership
-        run: sudo chown -R $(whoami) /__w/machine_learning_cicd/machine_learning_cicd
+        with:
+          ref: main  # Or replace with your default branch name if it's not 'main'
+          fetch-depth: 0  # Fetch all history
       - name: Checkout main branch
         run: git checkout main
       - name: "Set up Python"
@@ -89,10 +88,9 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
-      - name: Configure Git
-        run: git config --global --add safe.directory /__w/machine_learning_cicd/machine_learning_cicd
-      - name: Change directory ownership
-        run: sudo chown -R $(whoami) /__w/machine_learning_cicd/machine_learning_cicd
+        with:
+          ref: main  # Or replace with your default branch name if it's not 'main'
+          fetch-depth: 0  # Fetch all history
       - name: Checkout main branch
         run: git checkout main
       - name: "Set up Python"
