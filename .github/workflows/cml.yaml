@@ -52,7 +52,6 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: evaluation_report_main
-          path: outputs
       - name: "Train Model"
         run: |
           ls -R
