@@ -1,4 +1,4 @@
-# Machine Learning CI/CD with GitHub Actions
+# CI/CD for Machine Learning Development
 
 ## Event Information
 
