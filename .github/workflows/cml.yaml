@@ -51,8 +51,12 @@ jobs:
         run: |
           pip install -r requirements.txt
       - name: "Download main validation metrics"
-        uses: actions/download-artifact@v2
+        uses: dawidd6/action-download-artifact@v2
         with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          workflow: "cml.yml"
+          branch: main
+          event: push
           name: evaluation_report_main
       - name: "Train Model"
         run: |
