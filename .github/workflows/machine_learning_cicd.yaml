@@ -11,7 +11,17 @@ jobs:
     runs-on: ubuntu-latest
     container: docker://ghcr.io/iterative/cml:0-dvc2-base1
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        with:
+          ref: main  # Or replace with your default branch name if it's not 'main'
+          fetch-depth: 0  # Fetch all history
+      - name: Configure Git
+        run: git config --global --add safe.directory /__w/machine_learning_cicd/machine_learning_cicd
+      - name: Change directory ownership
+        run: sudo chown -R $(whoami) /__w/machine_learning_cicd/machine_learning_cicd
+      - name: Checkout main branch
+        run: git checkout main
       - name: "Set up Python"
         run: |
           apt-get update -y
@@ -39,7 +49,16 @@ jobs:
     runs-on: ubuntu-latest
     container: docker://ghcr.io/iterative/cml:0-dvc2-base1
     steps:
-      - uses: actions/checkout@v3 
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      - name: Configure Git
+        run: git config --global --add safe.directory /__w/machine_learning_cicd/machine_learning_cicd
+      - name: Change directory ownership
+        run: sudo chown -R $(whoami) /__w/machine_learning_cicd/machine_learning_cicd
+      - name: Checkout PR branch
+        run: git fetch origin ${{ github.head_ref }}:${{ github.head_ref }}
+      - name: Switch to PR branch
+        run: git checkout ${{ github.head_ref }}
       - name: "Set up Python"
         run: |
           apt-get update -y
@@ -71,7 +90,17 @@ jobs:
     runs-on: ubuntu-latest
     container: docker://ghcr.io/iterative/cml:0-dvc2-base1
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        with:
+          ref: main  # Or replace with your default branch name if it's not 'main'
+          fetch-depth: 0  # Fetch all history
+      - name: Configure Git
+        run: git config --global --add safe.directory /__w/machine_learning_cicd/machine_learning_cicd
+      - name: Change directory ownership
+        run: sudo chown -R $(whoami) /__w/machine_learning_cicd/machine_learning_cicd
+      - name: Checkout main branch
+        run: git checkout main
       - name: "Set up Python"
         run: |
           apt-get update -y
@@ -98,7 +127,16 @@ jobs:
     runs-on: ubuntu-latest
     container: docker://ghcr.io/iterative/cml:0-dvc2-base1
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      - name: Configure Git
+        run: git config --global --add safe.directory /__w/machine_learning_cicd/machine_learning_cicd
+      - name: Change directory ownership
+        run: sudo chown -R $(whoami) /__w/machine_learning_cicd/machine_learning_cicd
+      - name: Checkout PR branch
+        run: git fetch origin ${{ github.head_ref }}:${{ github.head_ref }}
+      - name: Switch to PR branch
+        run: git checkout ${{ github.head_ref }}
       - name: "Set up Python"
         run: |
           apt-get update -y
