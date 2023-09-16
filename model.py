@@ -28,17 +28,17 @@ class SpamDetectorModel:
         inputs = layers.Input(shape=(1,), dtype='string')
         x = self.text_vectorization(inputs)
         x = self.embedding(x)
-        x = layers.LSTM(64)(x)
+        x = layers.GRU(64)(x)
         outputs = layers.Dense(3, activation='softmax')(x)
 
-        self.model = tf.keras.Model(inputs, outputs, name="LSTM_model")
+        self.model = tf.keras.Model(inputs, outputs, name="GRU_model")
         self.model.compile(loss='categorical_crossentropy',
                            optimizer='adam',
                            metrics=["accuracy"])
 
-    def train(self, X_train, y_train, X_val, y_val, branch='main', epochs=30):
+    def train(self, X_train, y_train, X_val, y_val, branch='main'):
         self.text_vectorization.adapt(X_train)
-        history = self.model.fit(X_train, y_train, epochs, validation_data=(X_val, y_val))
+        history = self.model.fit(X_train, y_train, epochs=30, validation_data=(X_val, y_val))
 
         # Plot training & validation accuracy values
         plt.figure(figsize=[8, 6])
