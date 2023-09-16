@@ -33,11 +33,13 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument('--train', action='store_true')
     ap.add_argument('--test', action='store_true')
+    ap.add_argument('--experiment', action='store_true')
     args = vars(ap.parse_args())
 
+    branch = 'experiment' if args['experiment'] else 'main'
 
     if args['train']:
-        train()
+        train(branch)
     
     elif args['test']:
-        test()
+        test(branch)

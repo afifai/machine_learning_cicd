@@ -1,10 +1,16 @@
-name: "Train-Model"
+name: "Model Training"
 
 on:
   push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  train-model:
+  train-model-main:
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     container: docker://ghcr.io/iterative/cml:0-dvc2-base1
     steps:
@@ -30,8 +36,39 @@ jobs:
         with:
           name: model_main
           path: models
-  test-model:
-    needs: train-model
+  train-model-experiment:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    container: docker://ghcr.io/iterative/cml:0-dvc2-base1
+    steps:
+      - uses: actions/checkout@v3
+      - name: "Set up Python"
+        run: |
+          apt-get update -y
+          apt install graphviz -y
+          pip install --upgrade pip
+      - name: "Install dependencies"
+        run: |
+          pip install -r requirements.txt
+      - name: "Download main validation metrics"
+        uses: actions/download-artifact@v2
+        with:
+          name: evaluation_report_main
+      - name: "Train Model"
+        run: |
+          python main.py --train --experiment
+      - name: "Upload evaluation report"
+        uses: actions/upload-artifact@v2
+        with:
+          name: evaluation_report_experiment
+          path: outputs
+      - name: "Upload model"
+        uses: actions/upload-artifact@v2
+        with:
+          name: model_experiment
+          path: models
+  test-model-main:
+    needs: train-model-main
     runs-on: ubuntu-latest
     container: docker://ghcr.io/iterative/cml:0-dvc2-base1
     steps:
@@ -56,11 +93,47 @@ jobs:
         with:
           name: test_report_main
           path: outputs
-  generate-comment:
-    needs: test-model
+  test-model-experiment:
+    needs: train-model-experiment
     runs-on: ubuntu-latest
     container: docker://ghcr.io/iterative/cml:0-dvc2-base1
     steps:
+      - uses: actions/checkout@v3
+      - name: "Set up Python"
+        run: |
+          apt-get update -y
+          apt install graphviz -y
+          pip install --upgrade pip
+      - name: "Install dependencies"
+        run: |
+          pip install -r requirements.txt
+      - name: "Download Model"
+        uses: actions/download-artifact@v2
+        with:
+          name: model_experiment
+      - name: "Download main test metrics"
+        uses: actions/download-artifact@v2
+        with:
+          name: evaluation_report_main
+      - name: "Test Model"
+        run: |
+          python main.py --test --experiment
+      - name: "Upload evaluation report"
+        uses: actions/upload-artifact@v2
+        with:
+          name: test_report_experiment
+          path: outputs
+  generate-comment-main:
+    needs: test-model-main
+    runs-on: ubuntu-latest
+    container: docker://ghcr.io/iterative/cml:0-dvc2-base1
+    steps:
+      - name: "Set up Python"
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: "Checkout code"
+        uses: actions/checkout@v3
       - name: "Download evaluation report"
         uses: actions/download-artifact@v2
         with:
@@ -73,10 +146,48 @@ jobs:
         run: |
           echo "## Model Report" > report.md
           echo "### Validation Metrics" >> report.md
-          cat evaluation_report_validation.txt >> report.md
+          cat evaluation_report_main_validation.txt >> report.md
           echo "\n" >> report.md
           echo "### Testing Metrics" >> report.md
-          cat evaluation_report_test.txt >> report.md
+          cat evaluation_report_main_test.txt >> report.md
+          echo "\n" >> report.md
+          echo "## Model Visualization" >> report.md
+          echo "### Model Architecture" >> report.md
+          echo "![](./model_architecture_main.png)" >> report.md
+          echo "### Accuracy Plot" >> report.md
+          echo "![](./accuracy_plot_main.png)" >> report.md
+          echo "### Loss Plot" >> report.md
+          echo "![](./loss_plot_main.png)" >> report.md
+          cml comment create report.md
+        env:
+          REPO_TOKEN: ${{ secrets.TOKEN }}
+  generate-comment-experiment:
+    needs: test-model-experiment
+    runs-on: ubuntu-latest
+    container: docker://ghcr.io/iterative/cml:0-dvc2-base1
+    steps:
+      - name: "Set up Python"
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: "Checkout code"
+        uses: actions/checkout@v3
+      - name: "Download evaluation report experiment"
+        uses: actions/download-artifact@v2
+        with:
+          name: evaluation_report_experiment
+      - name: "Download test report experiment"
+        uses: actions/download-artifact@v2
+        with:
+          name: test_report_experiment
+      - name: "Send CML Report"
+        run: |
+          echo "## Model Report" > report.md
+          echo "### Validation Metrics Comparisson" >> report.md
+          cat evaluation_report_experiment_validation.txt >> report.md
+          echo "\n" >> report.md
+          echo "### Testing Metrics" >> report.md
+          cat evaluation_report_experiment_test.txt >> report.md
           echo "\n" >> report.md
           echo "## Model Visualization" >> report.md
           echo "### Model Architecture" >> report.md

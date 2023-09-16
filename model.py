@@ -77,25 +77,38 @@ class SpamDetectorModel:
 
         # Generate and format the classification report
         report_dict = classification_report(y_test, y_pred_classes, output_dict=True)
-        report_str = self._format_classification_report(report_dict, stage)
+        report_str = self._format_classification_report(report_dict, stage, branch)
 
         # Save report to text and pickle files
-        self._save_report_to_file(report_str, f"outputs/evaluation_report_{stage}.txt")
+        self._save_report_to_file(report_str, f"outputs/evaluation_report_{branch}_{stage}.txt")
         self._save_metrics_to_pickle(report_dict, f"outputs/metrics_{branch}_{stage}.pkl")
 
         # Print the formatted report
         print(report_str)
 
-    def _format_classification_report(self, report_dict, stage):
-        return f"""Classification Report {stage.capitalize()}:
-    | Metrics     | Main Branch   |
-    |-------------|---------------|
-    | Accuracy    | {report_dict['accuracy']:.2f}          |
-    | Precision   | {report_dict['1']['precision']:.2f}    |
-    | Recall      | {report_dict['1']['recall']:.2f}       |
-    | F1-Score    | {report_dict['1']['f1-score']:.2f}     |
-
-    """
+    def _format_classification_report(self, report_dict, stage, branch, report_main=None):
+        if branch == 'main':
+            report = [f"Classification Report {stage.capitalize()}:",
+                    "| Metrics     | Main Branch   |",
+                    "|-------------|---------------|",
+                    f"| Accuracy    | {report_dict['accuracy']:.2f}          |",
+                    f"| Precision   | {report_dict['1']['precision']:.2f}    |",
+                    f"| Recall      | {report_dict['1']['recall']:.2f}       |",
+                    f"| F1-Score    | {report_dict['1']['f1-score']:.2f}     |",
+                    "\n",
+            ]
+        elif branch == 'experiment':
+            report_main = self._load_report(f"metrics_main_{stage}.pkl")
+            report = [f"Classification Report {stage.capitalize()}:",
+                    "| Metrics     | Experiment Branch   | Main Branch   |",
+                    "|-------------|---------------|---------------|",
+                    f"| Accuracy    | {report_dict['accuracy']:.2f}          | {report_main['accuracy']:.2f}          |",
+                    f"| Precision   | {report_dict['1']['precision']:.2f}    | {report_main['1']['precision']:.2f}    |",
+                    f"| Recall      | {report_dict['1']['recall']:.2f}       | {report_main['1']['recall']:.2f}       |",
+                    f"| F1-Score    | {report_dict['1']['f1-score']:.2f}     | {report_main['1']['f1-score']:.2f}     |",
+                    "\n",
+            ]
+        return '\n'.join(report)
 
     def _save_report_to_file(self, report_str, filepath):
         with open(filepath, "w") as f:
@@ -104,6 +117,11 @@ class SpamDetectorModel:
     def _save_metrics_to_pickle(self, report_dict, filepath):
         with open(filepath, "wb") as f:
             pickle.dump(report_dict, f)
+    
+    def _load_report(self, filepath):
+        with open(filepath, "rb") as f:
+            report = pickle.load(f)
+        return report
     
     def save(self, filepath):
         """
