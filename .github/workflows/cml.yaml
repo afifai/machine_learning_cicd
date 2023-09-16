@@ -109,13 +109,16 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: model_experiment
-      - name: "Download main test metrics"
+      - name: "Download main validation metrics"
         uses: actions/download-artifact@v2
         with:
           name: evaluation_report_main
+      - name: "Download main test metrics"
+        uses: actions/download-artifact@v2
+        with:
+          name: test_report_main
       - name: "Test Model"
         run: |
-          ls -R
           python main.py --test --experiment
       - name: "Upload evaluation report"
         uses: actions/upload-artifact@v2
