@@ -25,7 +25,7 @@ def train(branch='main'):
 def test(branch='main'):
     # Load data testing
     X_test, y_test = load_test_data()
-    model = SpamDetectorModel.load(f'model_{branch}.tf')
+    model = SpamDetectorModel.load(f'models/model_{branch}.tf')
     # Evaluate the model
     model.evaluate_model(X_test, y_test, branch, stage='test')
 

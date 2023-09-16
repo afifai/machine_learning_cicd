@@ -52,6 +52,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: evaluation_report_main
+          path: outputs
       - name: "Train Model"
         run: |
           python main.py --train --experiment
@@ -83,6 +84,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: model_main
+          path: models
       - name: "Test Model"
         run: |
           python main.py --test
@@ -109,14 +111,17 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: model_experiment
+          path: models
       - name: "Download main validation metrics"
         uses: actions/download-artifact@v2
         with:
           name: evaluation_report_main
+          path: outputs
       - name: "Download main test metrics"
         uses: actions/download-artifact@v2
         with:
           name: test_report_main
+          path: outputs
       - name: "Test Model"
         run: |
           python main.py --test --experiment
@@ -141,10 +146,12 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: evaluation_report_main
+          path: outputs
       - name: "Download test report"
         uses: actions/download-artifact@v2
         with:
           name: test_report_main
+          path: outputs
       - name: "Send CML Report"
         run: |
           echo "## Model Report" > report.md
@@ -179,10 +186,12 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: evaluation_report_experiment
+          path: outputs
       - name: "Download test report experiment"
         uses: actions/download-artifact@v2
         with:
           name: test_report_experiment
+          path: outputs
       - name: "Send CML Report"
         run: |
           echo "## Model Report" > report.md
@@ -207,7 +216,7 @@ jobs:
           echo "#### Main" >> report.md
           echo "![](./loss_plot_main.png)" >> report.md
           echo "#### Experiment" >> report.md
-          echo "![](./loss_plot_main.png)" >> report.md
+          echo "![](./loss_plot_experiment.png)" >> report.md
           cml comment create report.md
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}

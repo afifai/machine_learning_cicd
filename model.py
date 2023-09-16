@@ -98,7 +98,7 @@ class SpamDetectorModel:
                     "\n",
             ]
         elif branch == 'experiment':
-            report_main = self._load_report(f"metrics_main_{stage}.pkl")
+            report_main = self._load_report(f"outputs/metrics_main_{stage}.pkl")
             report = [f"Classification Report {stage.capitalize()}:",
                     "| Metrics     | Experiment Branch   | Main Branch   |",
                     "|-------------|---------------|---------------|",
