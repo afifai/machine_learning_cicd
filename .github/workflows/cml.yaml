@@ -124,6 +124,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: test_report_experiment
+          path: outputs
   generate-comment-main:
     if: github.event_name == 'push'
     needs: test-model-main
