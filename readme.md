@@ -2,7 +2,7 @@
 
 ## Event Information
 
-🗓️ This repository was created for a talk at the Keras Community Day on September 16, 2023, hosted by BINUS Bandung.
+🗓️ This repository was created for a talk at the Keras Community Day by GDG Bandung on September 16, 2023 at BINUS Bandung.
 
 ## Description
 
