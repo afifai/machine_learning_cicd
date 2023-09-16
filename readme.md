@@ -19,35 +19,35 @@ This repository demonstrates a complete machine learning workflow from developme
 
 To install the project dependencies, run the following command:
 
-\`\`\`bash
+```bash
 pip install -r requirements.txt
-\`\`\`
+```
 
 ## Usage
 
 ### For Training
 
-\`\`\`bash
+```bash
 python main.py --train
-\`\`\`
+```
 
 ### For Testing
 
-\`\`\`bash
+```bash
 python main.py --test
-\`\`\`
+```
 
 ### For Experimentation with New Code (Training)
 
-\`\`\`bash
+```bash
 python main.py --train --experiment
-\`\`\`
+```
 
 ### For Experimentation with New Code (Testing)
 
-\`\`\`bash
+```bash
 python main.py --test --experiment
-\`\`\`
+```
 
 ## GitHub Actions Output
 
