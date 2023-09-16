@@ -36,7 +36,7 @@ class SpamDetectorModel:
                            optimizer='adam',
                            metrics=["accuracy"])
 
-    def train(self, X_train, y_train, X_val, y_val,epochs=30, branch='main'):
+    def train(self, X_train, y_train, X_val, y_val, branch='main', epochs=30):
         self.text_vectorization.adapt(X_train)
         history = self.model.fit(X_train, y_train, epochs, validation_data=(X_val, y_val))
 
