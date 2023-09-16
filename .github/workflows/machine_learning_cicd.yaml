@@ -196,27 +196,27 @@ jobs:
         run: |
           echo "## Model Report" > report.md
           echo "### Validation Metrics Comparisson" >> report.md
-          cat evaluation_report_experiment_validation.txt >> report.md
+          cat outputs/evaluation_report_experiment_validation.txt >> report.md
           echo "\n" >> report.md
           echo "### Testing Metrics" >> report.md
-          cat evaluation_report_experiment_test.txt >> report.md
+          cat outputs/evaluation_report_experiment_test.txt >> report.md
           echo "\n" >> report.md
           echo "## Model Visualization" >> report.md
           echo "### Model Architecture" >> report.md
           echo "#### Main" >> report.md
-          echo "![](./model_architecture_main.png)" >> report.md
+          echo "![](outputs//model_architecture_main.png)" >> report.md
           echo "#### Experiment" >> report.md
-          echo "![](./model_architecture_experiment.png)" >> report.md
+          echo "![](outputs//model_architecture_experiment.png)" >> report.md
           echo "### Accuracy Plot" >> report.md
           echo "#### Main" >> report.md
-          echo "![](./accuracy_plot_main.png)" >> report.md
+          echo "![](outputs//accuracy_plot_main.png)" >> report.md
           echo "#### Experiment" >> report.md
-          echo "![](./accuracy_plot_experiment.png)" >> report.md
+          echo "![](outputs//accuracy_plot_experiment.png)" >> report.md
           echo "### Loss Plot" >> report.md
           echo "#### Main" >> report.md
-          echo "![](./loss_plot_main.png)" >> report.md
+          echo "![](outputs//loss_plot_main.png)" >> report.md
           echo "#### Experiment" >> report.md
-          echo "![](./loss_plot_experiment.png)" >> report.md
+          echo "![](outputs//loss_plot_experiment.png)" >> report.md
           cml comment create report.md
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
