@@ -28,7 +28,7 @@ class SpamDetectorModel:
         inputs = layers.Input(shape=(1,), dtype='string')
         x = self.text_vectorization(inputs)
         x = self.embedding(x)
-        x = layers.GRU(32)(x)
+        x = layers.LSTM(64)(x)
         outputs = layers.Dense(3, activation='softmax')(x)
 
         self.model = tf.keras.Model(inputs, outputs, name="LSTM_model")
