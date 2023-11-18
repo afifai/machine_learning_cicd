@@ -31,7 +31,7 @@ class SpamDetectorModel:
         x = layers.GRU(64)(x)
         outputs = layers.Dense(3, activation='softmax')(x)
 
-        self.model = tf.keras.Model(inputs, outputs, name="GRU_model")
+        self.model = tf.keras.Model(inputs, outputs, name="LSTM_model")
         self.model.compile(loss='categorical_crossentropy',
                            optimizer='adam',
                            metrics=["accuracy"])
